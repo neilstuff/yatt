@@ -1,0 +1,51 @@
+{
+  "name": "yatt",
+  "version": "1.0.0",
+  "description": "Yet Another Tagging Tool",
+  "main": "main.js",
+  "scripts": {
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --publish never",
+    "start": "electron ."
+  },
+  "build": {
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thesourorange/yatt.git"
+  },
+  "keywords": [
+    "Electron",
+    "Bounding Box"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "dependencies": {
+    "electron-disable-file-drop": "^1.0.2",
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-uglify": "^4.0.1",
+    "font-awesome": "^4.7.0",
+    "jszip": "^3.5.0"
+  },
+  "devDependencies": {
+    "electron": "^9.2.0",
+    "electron-builder": "^22.8.0"
+  },
+  "bugs": {
+    "url": "https://github.com/thesourorange/electron-bbox/issues"
+  },
+  "homepage": "https://github.com/thesourorange/electron-bbox#readme"
+}
