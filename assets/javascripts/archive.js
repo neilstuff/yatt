@@ -1,5 +1,3 @@
-var Zip = require('jszip');
-
 function Archive(image_metadata) {
 
     this.image_metadata = image_metadata;
@@ -34,7 +32,7 @@ Archive.prototype.save = async function () {
 
     }
 
-    var zip = new Zip();
+    var zip = new JSZip();
 
     document.getElementById("waitMessage").textContent = "";
     document.getElementById("waitDialog").style.display = "inline-block";
@@ -161,7 +159,7 @@ Archive.prototype.load = function (img_metadata) {
                         var tags = {};
                         var names = {};
 
-                        var zip = new Zip();
+                        var zip = new JSZip();
 
                         zip.loadAsync(reader.result).then(async function (zip) {
                             var files = zip.file(/.*/);

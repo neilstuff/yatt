@@ -1,13 +1,12 @@
 /**
- * Electron Version VGG Annorator Tool
+ * Electron Version - VGG Annotation Tool 
+ * 
+ * Yet Another Tagging Tool
+ * 
+ * Author: Dr Neil Brittliff
  * 
  */
-
 "use strict";
-var remote = require('electron').remote
-var app = require('electron').remote.app;
-var session = require('electron').remote.session;
-var dialog = remote.require('electron').dialog;
 
 var VERSION = '1.0.0';
 var NAME = 'Yet Another Tagging Tool';
@@ -234,32 +233,30 @@ function __update_ui_components() {
 }
 
 function window_minimize() {
-    var window = remote.getCurrentWindow();
-
-    window.minimize()
+    window.api.minimize();
 }
 
 function window_maximize() {
-    var window = remote.getCurrentWindow();
+    var isMaximized = window.api.isMaximized();
 
-    if (!window.isMaximized()) {
+    if (!isMaximized) {
         var element = document.getElementById("toolbar_window_maximize-icon");
 
         element.classList.remove("fa-square-o");
         element.classList.add("fa-window-restore");
-        window.maximize();
+        window.api.maximize();
     } else {
         var element = document.getElementById("toolbar_window_maximize-icon");
 
         element.classList.remove("fa-window-restore");
         element.classList.add("fa-square-o");
-        window.unmaximize();
+        window.api.unmaximize();
     }
 }
 
 function window_close() {
 
-    app.quit();
+    window.api.quit();
 
 }
 
