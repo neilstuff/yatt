@@ -37,12 +37,12 @@
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-uglify": "^4.0.1",
     "font-awesome": "^4.7.0",
-    "jszip": "^3.5.0",
-    "node": "^15.8.0"
+    "jszip": "^3.5.0"
   },
   "devDependencies": {
     "electron": "^14.0.1",
-    "electron-builder": "22.11.7"
+    "electron-builder": "22.11.7",
+    "node": "^15.8.0"
   },
   "bugs": {
     "url": "https://github.com/thesourorange/yatt/issues"
