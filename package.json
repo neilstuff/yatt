@@ -32,7 +32,6 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "dependencies": {
-    "electron-disable-file-drop": "^1.0.2",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-concat": "^0.5.1",
@@ -41,11 +40,11 @@
     "jszip": "^3.5.0"
   },
   "devDependencies": {
-    "electron": "^9.2.0",
-    "electron-builder": "^22.8.0"
+    "electron": "^14.0.1",
+    "electron-builder": "22.11.7"
   },
   "bugs": {
-    "url": "https://github.com/thesourorange/electron-bbox/issues"
+    "url": "https://github.com/thesourorange/yatt/issues"
   },
-  "homepage": "https://github.com/thesourorange/electron-bbox#readme"
+  "homepage": "https://github.com/thesourorange/yatt/#readme"
 }

@@ -4,6 +4,8 @@ const config = require('./config.json');
 
 const electron = require('electron');
 const { app, protocol } = require('electron');
+const { ipcMain } = electron;
+
 const BrowserWindow = electron.BrowserWindow;
 
 const path = require('path')
@@ -22,7 +24,11 @@ function createWindow() {
         frame: false,
         autoHideMenuBar: true,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: false,
+            contextIsolation: true,
+            enableRemoteModule: false,
+            nativeWindowOpen: true,
+            preload: path.join(__dirname, "preload.js")
         }
     })
 
@@ -54,3 +60,33 @@ app.on('activate', () => {
         createWindow()
     }
 })
+
+ipcMain.on('quit', function(event, arg) {
+
+    app.quit();
+
+});
+
+ipcMain.on('minimize', function(event, arg) {
+
+    mainWindow.minimize();
+
+});
+
+ipcMain.on('isMaximized', function(event, arg) {
+
+    event.returnValue = mainWindow.isMaximized();
+
+});
+
+ipcMain.on('maximize', function(event, arg) {
+
+    mainWindow.maximize();
+
+});
+
+ipcMain.on('unmaximize', function(event, arg) {
+
+    mainWindow.unmaximize();
+
+});
