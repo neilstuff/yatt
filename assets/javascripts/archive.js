@@ -4,16 +4,16 @@ function Archive(image_metadata) {
 
 }
 
-Archive.prototype.save = async function () {
+Archive.prototype.save = async function() {
 
     function getImageDimensions(fileRef) {
         return new Promise(accept => {
             var reader = new FileReader();
-            reader.addEventListener("load", function () {
-                
+            reader.addEventListener("load", function() {
+
                 var image = new Image();
 
-                image.addEventListener("load", function () {
+                image.addEventListener("load", function() {
 
                     accept({
                         width: image.naturalWidth,
@@ -43,14 +43,12 @@ Archive.prototype.save = async function () {
             continue;
         }
 
-        console.log(JSON.stringify(this.image_metadata[metadata]));
-
         if (!('width' in this.image_metadata[metadata].dimensions && 'height' in this.image_metadata[metadata].dimensions)) {
 
             var dimensions = await getImageDimensions(this.image_metadata[metadata].fileref);
 
             this.image_metadata[metadata].set_dimensions(dimensions.width, dimensions.height);
-  
+
         }
 
         var attributes = {
@@ -77,13 +75,13 @@ Archive.prototype.save = async function () {
     }, 1, tags_file_name);
 
     zip.generateAsync({ type: "blob" })
-        .then(function (blob) {
-            var click = function (node) {
+        .then(function(blob) {
+            var click = function(node) {
                 var event = new MouseEvent("click");
                 node.dispatchEvent(event);
             }
 
-            document.body.onfocus = function () {
+            document.body.onfocus = function() {
                 document.getElementById("waitDialog").style.display = "none";
                 document.body.onfocus = null;
             }
@@ -106,7 +104,7 @@ Archive.prototype.save = async function () {
 
 }
 
-Archive.prototype.load = function (img_metadata) {
+Archive.prototype.load = function(img_metadata) {
 
     return new Promise(accept => {
 
@@ -117,7 +115,7 @@ Archive.prototype.load = function (img_metadata) {
             function get_blob(file) {
 
                 return new Promise(resolve => {
-                    file.async("blob").then(function (blob) {
+                    file.async("blob").then(function(blob) {
                         resolve(blob);
                     });
 
@@ -130,7 +128,7 @@ Archive.prototype.load = function (img_metadata) {
                 return new Promise(resolve => {
                     var reader = new FileReader();
 
-                    reader.onload = function () {
+                    reader.onload = function() {
                         resolve(reader.result);
                     }
 
@@ -144,7 +142,7 @@ Archive.prototype.load = function (img_metadata) {
             loadButton.setAttribute("type", "file");
             loadButton.accept = '.zip';
 
-            loadButton.onchange = function (event) {
+            loadButton.onchange = function(event) {
                 document.getElementById("waitMessage").textContent = "";
                 document.getElementById("waitDialog").style.display = "inline-block";
 
@@ -154,14 +152,14 @@ Archive.prototype.load = function (img_metadata) {
 
                     var reader = new FileReader();
 
-                    reader.onload = function () {
+                    reader.onload = function() {
                         var images = {};
                         var tags = {};
                         var names = {};
 
                         var zip = new JSZip();
 
-                        zip.loadAsync(reader.result).then(async function (zip) {
+                        zip.loadAsync(reader.result).then(async function(zip) {
                             var files = zip.file(/.*/);
 
                             for (var iFile = 0; iFile < files.length; iFile++) {
@@ -203,7 +201,7 @@ Archive.prototype.load = function (img_metadata) {
 
             };
 
-            document.body.onfocus = function () {
+            document.body.onfocus = function() {
 
                 document.getElementById("waitDialog").style.display = "none";
                 document.body.onfocus = null;
