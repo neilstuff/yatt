@@ -9,7 +9,6 @@ function Geometry() {}
  * @param descending_order the Descending Order
  * 
  * @returns the Region Identifier if found or -1
- * 
  */
 Geometry.is_inside_regions = function(canvas_regions, x, y, descending_order) {
     var regions = canvas_regions.length;
@@ -236,7 +235,7 @@ Geometry.is_on_region_corner = function(canvas_regions, x, y) {
             region_edge[1] = result;
             return region_edge;
         }
-        
+
     }
 
     region_edge[0] = -1;
