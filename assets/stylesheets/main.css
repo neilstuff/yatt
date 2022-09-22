@@ -676,6 +676,7 @@ ul.region_shape .selected {
     width: 30px;
 }
 
+
 /* Loading spinbar */
 
 .loader {
@@ -696,9 +697,13 @@ ul.region_shape .selected {
 }
 
 @keyframes spin-loader {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-} 
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 
 input[type=checkbox] {
     visibility: hidden;

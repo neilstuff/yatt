@@ -1,9 +1,9 @@
 /**
- * Electron Version - VGG Annotation Tool 
+ * Electron Version - YATT Annotation Tool 
  * 
  * Yet Another Tagging Tool
  * 
- * Author: Dr Neil Brittliff
+ * Author: Dr. Neil Brittliff
  * 
  */
 "use strict";
@@ -210,7 +210,7 @@ function __init() {
 }
 
 /**
- * Update the Componets
+ * Update the UI Componets and take in consideration the Zoom level
  * 
  */
 function __update_ui_components() {
@@ -313,7 +313,7 @@ function load_archive() {
         __canvas_scale = 1.0
         __show_image(0);
 
-        __update_img_fn_list();
+        update_img_fn_list();
 
     });
 
@@ -361,7 +361,7 @@ function clear_local_images() {
 
     set_all_canvas_size(0, 0);
 
-    __update_img_fn_list();
+    update_img_fn_list();
 
     set_all_text_panel_display('none');
 
@@ -447,7 +447,8 @@ function clear_image_display_area() {
 }
 
 /**
- * Strole the Local Image
+ * Store the Local Image
+ * 
  * @param {event} event the Event
  */
 function store_local_img_ref(event) {
@@ -502,7 +503,7 @@ function store_local_img_ref(event) {
         } else {
             __show_image(original_image_count);
         }
-        __update_img_fn_list();
+        update_img_fn_list();
     } else {
         show_message("Please upload some image files!");
     }
@@ -672,7 +673,7 @@ function __show_image(image_index) {
 
             // refresh the image list
             __reload_img_fn_list_table = true;
-            __update_img_fn_list();
+            update_img_fn_list();
             __update_attributes_panel();
 
         });
@@ -713,8 +714,6 @@ function __load_canvas_regions() {
 // updates currently selected region shape
 function select_region_shape(sel_shape_name) {
     for (var shape_name in REGION_SHAPE) {
-        console.log("Found shape name: " + shape_name);
-
         var ui_element = document.getElementById('region_shape_' + REGION_SHAPE[shape_name]);
         ui_element.classList.remove('selected');
     }
@@ -1400,7 +1399,6 @@ function __redraw_img_canvas() {
 }
 
 function __redraw_reg_canvas() {
-    console.log("__redraw_reg_canvas: " + __is_current_image_loaded + ":" + __is_region_id_visible + ":" + __is_region_boundary_visible);
 
     if (__is_current_image_loaded) {
         if (__canvas_regions.length > 0) {
@@ -1421,13 +1419,10 @@ function __clear_reg_canvas() {
 }
 
 function draw_all_regions() {
-    console.log("draw_all_regions : " + __canvas_regions.length);
 
     for (var iRegion = 0; iRegion < __canvas_regions.length; ++iRegion) {
         var attr = __canvas_regions[iRegion].shape_attributes;
         var is_selected = __canvas_regions[iRegion].is_user_selected;
-
-        console.log("Draw all regions:" + attr['name']);
 
         switch (attr['name']) {
             case REGION_SHAPE.RECT:
@@ -1875,6 +1870,9 @@ function del_sel_regions() {
     show_message('Deleted ' + del_region_count + ' selected regions');
 }
 
+/**
+ * Select all teh regions annotated within an image
+ */
 function sel_all_regions() {
     if (!__is_current_image_loaded) {
         show_message('First load some images!');
@@ -2442,7 +2440,7 @@ function __img_loading_spinbar(show) {
 /**
  * Update the Image List
  */
-function __update_img_fn_list() {
+function update_img_fn_list() {
     var regex = document.getElementById('img_fn_list_regex').value;
 
     if (regex === '' || regex === null) {
@@ -2451,18 +2449,10 @@ function __update_img_fn_list() {
 
         __loaded_img_fn_list_table_html.push('<ul>');
 
-        var width = 240;
+        var width = get_max_image_width();
 
         for (var iImage = 0; iImage < __loaded_img_fn_list.length; ++iImage) {
-            var filename = __loaded_img_fn_list[iImage];
-            var filename_width = Math.floor(__metrics.getTextWidth(filename, 'normal 8pt sans-serif'));
-
-            width = filename_width > width ? filename_width : width;
-
-        }
-
-        for (var iImage = 0; iImage < __loaded_img_fn_list.length; ++iImage) {
-            __loaded_img_fn_list_table_html.push(__generate_entry_html(iImage, width));
+            __loaded_img_fn_list_table_html.push(generate_entry_html(iImage, width));
             __loaded_img_fn_list_file_index.push(iImage);
         }
         __loaded_img_fn_list_table_html.push('</ul>');
@@ -2500,7 +2490,15 @@ function check_image_inclusion(file_name) {
 
 }
 
-function __generate_entry_html(iImage, width) {
+/**
+ * generate the Image List
+ * 
+ * 
+ * @param {int} iImage the location within the list
+ * @param {int} width the maximum width of the image
+ * @returns the html for the list item within the image list
+ */
+function generate_entry_html(iImage, width) {
     var html = '';
     var filename = __loaded_img_fn_list[iImage];
     var attributes = __img_metadata[filename];
@@ -2509,7 +2507,7 @@ function __generate_entry_html(iImage, width) {
 
     if (iImage === __image_index) {
         // highlight the current entry
-        html += `<li id="flist${iImage}" style="display:block; cursor: default; height:22px;">`;
+        html += `<li id="flist${iImage}" style="display:block; cursor: default; height:22px; width:${width}px;">`;
         html += `<label class="container" style="margin-left:3px; position:relative; text-align:bottom; top:2px; color:rgba(0,0,0,1.0);">`;
         html += `<input type="checkbox" style="width:16px; height:16px;" id="select-${filename}" name="${filename}" value="${filename}" onclick="check_image_inclusion('${filename}');" ${checked}>`;
         html += `<span class="checkmark"></span>`;
@@ -2519,7 +2517,7 @@ function __generate_entry_html(iImage, width) {
         html += `</label>`;
 
     } else {
-        html += `<li id="flist${iImage}" onclick="jump_to_image(${iImage})" style="display:block; cursor: default; height:22px;">`;
+        html += `<li id="flist${iImage}" onclick="jump_to_image(${iImage})" style="display:block; cursor: default; height:22px; width:${width}px;">`;
         html += `<label class="container" style="margin-left:3px; position:relative; top:2px; color:rgba(0,0,0,0.6);">`;
         html += `<input type="checkbox" style="width:16px; height:16px;" id="select-${filename}" name="${filename}" value="${filename}" onclick="check_image_inclusion('${filename}');" ${checked}>`;
         html += `<span class="checkmark"></span>`
@@ -2534,16 +2532,44 @@ function __generate_entry_html(iImage, width) {
     return html;
 }
 
+/**
+ * Get the maximum width of an filename within the Image List
+ * 
+ * @returns the maximum width of an filename within the Image List
+ */
+function get_max_image_width() {
+    var width = 240;
+
+    for (var iImage = 0; iImage < __loaded_img_fn_list.length; ++iImage) {
+        var filename = __loaded_img_fn_list[iImage];
+        var filename_width = Math.floor(__metrics.getTextWidth(filename, 'normal 8pt sans-serif'));
+
+        width = filename_width > width ? filename_width : width;
+
+    }
+
+    // Add a bit for the checkbox
+
+    return width + 30;
+
+}
+
+/**
+ * Reduce the Image List Size based on a regular expressuib
+ * 
+ */
 function img_fn_list_generate_html(regex) {
     __loaded_img_fn_list_table_html = [];
     __loaded_img_fn_list_file_index = [];
     __loaded_img_fn_list_table_html.push('<ul>');
 
+    var width = get_max_image_width();
+
     for (var iImage = 0; iImage < __loaded_img_fn_list.length; ++iImage) {
         var filename = __loaded_img_fn_list[iImage];
 
         if (filename.match(regex) !== null) {
-            __loaded_img_fn_list_table_html.push(__generate_entry_html(iImage));
+            __loaded_img_fn_list_table_html.push(generate_entry_html(iImage, width));
             __loaded_img_fn_list_file_index.push(iImage);
         }
 
